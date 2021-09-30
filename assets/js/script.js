@@ -1,3 +1,29 @@
+var alphabet = "abcdefghijklmnopqrstuvwxyz"
+var lowercaseLettersArray = alphabet.split("")
+var uppercaseLettersArray = alphabet.toUpperCase().split("")
+var specialCharactersArray = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split("");
+
+// random value generators
+var lowercaseGenerator = function() {
+  var index = Math.floor(Math.random() * 27)
+  return lowercaseLettersArray[index]
+}
+
+var uppercaseGenerator = function() {
+  var index = Math.floor(Math.random() * 27)
+  return uppercaseLettersArray[index]
+}
+
+var numberGenerator = function() {
+  return Math.floor(Math.random() * 10)
+}
+
+var specialCharacterGenerator = function() {
+  var index = Math.floor(Math.random() * specialCharactersArray.length)
+  return specialCharactersArray[index]
+}
+
+// define user preferences
 var userPreferences = {
   length: null,
   letters: null,
