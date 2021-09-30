@@ -1,29 +1,29 @@
-var alphabet = "abcdefghijklmnopqrstuvwxyz"
-var lowercaseLettersArray = alphabet.split("")
-var uppercaseLettersArray = alphabet.toUpperCase().split("")
-var specialCharactersArray = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".split("");
+var alphabet = "abcdefghijklmnopqrstuvwxyz";
+var lowercaseLettersArray = alphabet.split("");
+var uppercaseLettersArray = alphabet.toUpperCase().split("");
+var specialCharactersArray = " !\"#$%&'()*+,-./:;<=>?@[]^_`{|}~".split("");
 
 // random value generators
-var lowercaseGenerator = function() {
-  var index = Math.floor(Math.random() * 27)
-  return lowercaseLettersArray[index]
-}
+var lowercaseGenerator = function () {
+  var index = Math.floor(Math.random() * lowercaseLettersArray.length);
+  return lowercaseLettersArray[index];
+};
 
-var uppercaseGenerator = function() {
-  var index = Math.floor(Math.random() * 27)
-  return uppercaseLettersArray[index]
-}
+var uppercaseGenerator = function () {
+  var index = Math.floor(Math.random() * uppercaseLettersArray.length);
+  return uppercaseLettersArray[index];
+};
 
-var numberGenerator = function() {
-  return Math.floor(Math.random() * 10)
-}
+var numberGenerator = function () {
+  return Math.floor(Math.random() * 10);
+};
 
-var specialCharacterGenerator = function() {
-  var index = Math.floor(Math.random() * specialCharactersArray.length)
-  return specialCharactersArray[index]
-}
+var specialCharacterGenerator = function () {
+  var index = Math.floor(Math.random() * specialCharactersArray.length);
+  return specialCharactersArray[index];
+};
 
-// define user preferences
+// define user preferences as global variable
 var userPreferences = {
   length: null,
   letters: null,
@@ -115,15 +115,53 @@ var getUserPreferences = function () {
   }
 
   // verify at least one option was selected
-  if(!userPreferences.letters && !userPreferences.numbers && !userPreferences.specialCharacters){
-    alert("Password must contain letters, numbers, or special characters. Please try again.");
+  if (
+    !userPreferences.letters &&
+    !userPreferences.numbers &&
+    !userPreferences.specialCharacters
+  ) {
+    alert(
+      "Password must contain letters, numbers, or special characters. Please try again."
+    );
     getUserPreferences();
   }
 };
 
 var generatePassword = function () {
   getUserPreferences();
+
+  // Create function array based on userPrefences
+  var functionArray = [];
+  switch (userPreferences.letters) {
+    case "lowercase":
+      functionArray.push(lowercaseGenerator);
+      break;
+    case "uppercase":
+      functionArray.push(uppercaseGenerator);
+      break;
+    case "both":
+      functionArray.push(lowercaseGenerator);
+      functionArray.push(uppercaseGenerator);
+      break;
+    default:
+      break;
+  }
+  if (userPreferences.numbers) {
+    functionArray.push(numberGenerator);
+  }
+  if (userPreferences.specialCharacters) {
+    functionArray.push(specialCharacterGenerator);
+  }
+
+  // Generate password
+  var generatedPassword = "";
+  for (var i = 0; i < userPreferences.length; i++) {
+    var index = Math.floor(Math.random() * functionArray.length);
+    generatedPassword += functionArray[index]();
+  }
+  return generatedPassword;
 };
+
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
