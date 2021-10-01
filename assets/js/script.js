@@ -130,8 +130,9 @@ var getUserPreferences = function () {
 var generatePassword = function () {
   getUserPreferences();
 
-  // Create function array based on userPrefences
+  // Define functionArray
   var functionArray = [];
+  //push relevant functions based on user's input
   switch (userPreferences.letters) {
     case "lowercase":
       functionArray.push(lowercaseGenerator);
@@ -153,12 +154,19 @@ var generatePassword = function () {
     functionArray.push(specialCharacterGenerator);
   }
 
-  // Generate password
   var generatedPassword = "";
-  for (var i = 0; i < userPreferences.length; i++) {
+
+  // use at least one of each character type in password
+  for(var i = 0; i < functionArray.length; i++){
+    generatedPassword += functionArray[i]();
+  }
+
+  // fill in remaining characters randomly (subtract previous entries)
+  for (var i = 0; i < (userPreferences.length - functionArray.length); i++) {
     var index = Math.floor(Math.random() * functionArray.length);
     generatedPassword += functionArray[index]();
   }
+
   return generatedPassword;
 };
 
